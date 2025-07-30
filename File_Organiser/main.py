@@ -12,10 +12,20 @@ def decorate(fx):
 @decorate   
 
 #main script
+
 def script():
+    realpath=input("Enter the folder name to sort [Use uppercase if any]:\n")
     
-    try:
-        downloadpath=os.path.join(os.path.expanduser("~"), "Downloads")
+    if not realpath:
+        print("Folder name not provided.\nTip: ENTER THE EXACT SAME NAME OF FOLDER THAT EXISTS in your Home directory.")
+        return
+    
+    downloadpath=os.path.join(os.path.expanduser("~"), realpath)
+    if not os.path.exists(downloadpath):
+        print(f" The folder '{realpath}' does not exist in your home directory.")
+        return
+   
+    try:    
         os.chdir(downloadpath)
         files = os.listdir()
         if not files:
@@ -31,7 +41,7 @@ def script():
                 if file.endswith((".tar.gz", ".tar.xz", ".tar.bz2", ".tgz")):
                     ext = ".tar.gz"
                         
-                if ext in (".pdf" ,  ".odt", ".xls",".docx",  ".txt"):
+                elif ext in (".pdf" ,  ".odt", ".xls",".docx",  ".txt"):
                     destination=os.path.join(os.path.expanduser("~"), "Documents")
                             
                 elif ext in (".jpg", ".webp", ".png", ".jpeg") :
@@ -39,13 +49,12 @@ def script():
                     
                 elif ext in (".tar", ".zip", ".exe", ".tar.gz", ".tgz", ".gz", ".xz", ".bz2"):
                     destination=os.path.join(os.path.expanduser("~"), "Archives")
-                        
-                elif ext in (".mp4",".mkv" , ".avi" , ".mov" , ".wmv" , ".flv" , ".webm" , ".mpeg" , ".mpg" , ".3gp"  ,".mts" , ".m2ts",  ".ogv" , ".ts") :
-                    destination=os.path.join(os.path.expanduser("~"), "Videos")
+                
+                elif ext in (".mkv" , ".avi" , ".mov" , ".wmv" , ".flv" , ".webm" , ".mpeg" , ".mpg" , ".3gp"  ,".mts" , ".m2ts",  ".ogv" , ".ts") :
+                     destination=os.path.join(os.path.expanduser("~"), "Videos")
                     
                 else:
-                    continue
-                        
+                    continue        
                 os.makedirs(destination , exist_ok=True)
                 print(f"Moving: {file} → {destination}")
                 shutil.move(file, os.path.join(destination, file))   
